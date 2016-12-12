@@ -64,7 +64,13 @@ public class Bildbearbeitung {
 	 */
 	private int[] getColors(int ARGB) {
 		// TODO: 8-4-a
-		return null;
+		int[] array = new int[4];
+		
+		for (int i=0; i<4; i++){
+			array[i] = ARGB % 256;
+			ARGB = ARGB / 256;
+		}
+		return array;
 	}
 	
 	/**
@@ -87,6 +93,8 @@ public class Bildbearbeitung {
 	 */
 	private void rotate(int n) {
 		// TODO 8-4-c
+		gigi
+		
 	}
 	
 	/**
@@ -100,7 +108,14 @@ public class Bildbearbeitung {
 	 * Das Bild wird vertikal gespiegelt
 	 */
 	private void mirror() {
-		// TODO 8-4-b
+		int tempPixel;
+		for (int i = 0; i< dimY(); i++ ){
+			for (int j = 0; j < dimX()/2; j++){
+				tempPixel = pixels[j][i];
+				pixels[j][i] = pixels[dimX()-j-1][i];
+				pixels[dimX()-j-1][i] = tempPixel;
+			}
+		}
 	}
 
 	/**

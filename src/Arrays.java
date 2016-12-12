@@ -112,6 +112,7 @@ public class Arrays {
 		for (int i=0;i<tempArray.length;i++){
 			for (int j=i+1;j<tempArray.length;j++){
 				if (tempArray[j]<tempArray[i]){
+					// tausche elemente
 					int temp = tempArray[i];
 					tempArray[i]=tempArray[j];
 					tempArray[j]=temp;
