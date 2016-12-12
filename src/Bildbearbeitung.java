@@ -93,9 +93,19 @@ public class Bildbearbeitung {
 	 */
 	private void rotate(int n) {
 		// TODO 8-4-c
-		gigi
-		
+		int counter = 0;
+		while (counter < n){
+			int[][] tempImg = new int[dimY()][dimX()];
+			for (int i = 0; i< dimY(); i++ ){
+				for (int j = 0; j < dimX(); j++){
+					tempImg[i][j] = pixels[j][dimY()-1-i]; 
+				}
+			}
+			pixels = tempImg;
+			counter++;
+		}
 	}
+			
 	
 	/**
 	 * Die Farben werden invertiert: Farbe = (255-Farbe)
