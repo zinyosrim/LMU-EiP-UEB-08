@@ -1,3 +1,8 @@
+/* Output von vorgegebenem String 
+ * 
+ * herzlichen glueckwunsch. du hast die aufgabe geloest.
+ * 
+ */
 public class Passwort {	
 	public static void main(String[] args){		
 		String eingabe = "";
@@ -38,7 +43,7 @@ public class Passwort {
 					ausgabe = ausgabe + (char)((int)(eingabe.charAt(i) + index));
 				}
 				else{
-					// Überlauf!Mache nach z bei a weiter 
+					// Überlauf! Mache nach z bei a weiter 
 					ausgabe = ausgabe + (char)((int)(eingabe.charAt(i)+index-26));
 				}
 

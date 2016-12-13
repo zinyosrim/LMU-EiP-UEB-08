@@ -62,17 +62,18 @@ public class Bildbearbeitung {
 	 * Information: alpha-rot-gruen-blau
 	 * @return 4-elementiges Array [alpha, red, green, blue]
 	 */
-	private int[] getColors(int ARGB) {
+	private static int[] getColors(int ARGB) {
 		// TODO: 8-4-a
 		int[] array = new int[4];
 		
-		for (int i=0; i<4; i++){
-			array[i] = ARGB % 256;
+		for (int i=3; i>-1; i--){
+			array[i] = ARGB % 256 +255 ;
 			ARGB = ARGB / 256;
 		}
 		return array;
 	}
 	
+
 	/**
 	 * Ein vierelementiges Array mit kleinen (< 1 byte) int-Werten 
 	 * wird zu einem einzigen 4 byte Integer zusammengesetzt. 
@@ -110,9 +111,26 @@ public class Bildbearbeitung {
 	/**
 	 * Die Farben werden invertiert: Farbe = (255-Farbe)
 	 */
+	
 	private void invert() {
 		// TODO	8-4-d
+		int[] tempArray = new int[4];
+		for (int y = 0; y< dimY(); y++ ){
+			for (int x = 0; x < dimX(); x++){
+				// get colors
+				tempArray = getColors(pixels[x][y]);
+				// invert 
+				tempArray[1] = 255-(int)tempArray[1];
+				tempArray[2] = 255-(int)tempArray[2];
+				tempArray[3] = 255-(int)tempArray[3];
+				// save in pixels
+				pixels[x][y] = setColors(tempArray);
+			}
+		}
 	}
+	
+	
+	
 	
 	/**
 	 * Das Bild wird vertikal gespiegelt
@@ -184,6 +202,21 @@ public class Bildbearbeitung {
 	 */	
 	private void medianFilter(){
 		//TODO 8-4-f
+		int[] tempArray = new int[5];
+		for (int y=1; y<dimY()-2; y++){
+			for (int x=1; x<dimX()-2; x++){
+				// init array zur berechnung des Median
+				for (int i=0;i<5;i++) tempArray[i]=0;
+				// 
+				tempArray = getColors(pixels[x][y]);
+				// invert 
+				tempArray[1] = 255-tempArray[1];
+				tempArray[2] = 255-tempArray[2];
+				tempArray[3] = 255-tempArray[3];
+				// save in pixels
+				pixels[x][y] = setColors(tempArray);
+			}
+		}
 	}
 
 	/** 
@@ -205,7 +238,8 @@ public class Bildbearbeitung {
     public static void main(String[] args) {
 
 		int argCount = args.length;
-
+		
+		
 		if(argCount == 0) {
 			System.out.println("Verwendung: java Bildbearbeitung <FILE> [-options]");
 			System.out.println("wobei options Folgendes umfasst:");
@@ -255,6 +289,22 @@ public class Bildbearbeitung {
 			bild.save(""+i);
 		}
 
+		
 		bild.save("done");
+		
+		int[] tarray=new int[4];
+		  //   System.out.println(pixels[3][3]);
+		     tarray=getColors(-6386301);
+		     for(int i=0;i<4;i++)
+		     {
+		      switch(i)
+		      {
+		      case 0: System.out.print("Alpha: ");break;
+		      case 1: System.out.print("R: ");break;
+		      case 2: System.out.print("G: ");break;
+		      case 3: System.out.print("B: ");break;
+		      }
+		      System.out.print(tarray[i]+"\n");
+		     }
 	}
 }
