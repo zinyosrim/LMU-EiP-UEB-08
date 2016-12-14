@@ -202,21 +202,52 @@ public class Bildbearbeitung {
 	 */	
 	private void medianFilter(){
 		//TODO 8-4-f
-		int[] tempArray = new int[5];
-		for (int y=1; y<dimY()-2; y++){
-			for (int x=1; x<dimX()-2; x++){
-				// init array zur berechnung des Median
-				for (int i=0;i<5;i++) tempArray[i]=0;
-				// 
-				tempArray = getColors(pixels[x][y]);
-				// invert 
-				tempArray[1] = 255-tempArray[1];
-				tempArray[2] = 255-tempArray[2];
-				tempArray[3] = 255-tempArray[3];
-				// save in pixels
-				pixels[x][y] = setColors(tempArray);
+		
+		
+		// Lese 4 Nachbarn, bestimme Farbwerte, schreibe sie und die des Mittelpunktes in ein eigenes Array 
+		
+		// Deklaration eigener Arrays für die Farben
+		int[]	alphaArray	= new int[5];
+		int[] 	rotArray 	= new int[5];
+		int[] 	gruenArray 	= new int[5];
+		int[] 	blauArray 	= new int[5];
+		int		counter		= 1;
+		int[]	tmpColArr	= new int[4];
+		int[][]	tmpImg		= new int[dimX()+2][dimX()+2];
+		
+		// gehe in einer 3x3 Matrix, beginnend links oben alle 8 Nachbarn des Mittelelements durch und
+		// nehme nur die unmittelbar Angrenzenden
+		for (int j=1; j<=3; j++){
+			for (int i=1; i<=3; i++){
+				// wenn counter gerade, dann schreibe die Werte in ein temp Array in 0..3
+				if (counter%2 == 0){
+					tmpColArr 					= getColors(pixels[i][j]); 
+					alphaArray[(counter-2)/2] 	= tmpColArr[0]; 
+					rotArray[(counter-2)/2] 	= tmpColArr[1];
+					gruenArray[(counter-2)/2] 	= tmpColArr[2]; 
+					blauArray[(counter-2)/2] 	= tmpColArr[3];	
+				}
+				// schreibe die Werte des Mittelpunktes an das Ende = 4
+				else if (counter==5){
+					alphaArray[4] 	= tmpColArr[0]; 
+					rotArray[4] 	= tmpColArr[1];
+					gruenArray[4] 	= tmpColArr[2]; 
+					blauArray[4] 	= tmpColArr[3];	
+				}
+				counter++;
 			}
 		}
+		
+		// setze die neuen Werte für einen Bildpunkt
+		tmpColArr[3] 	= median(alphaArray);
+		tmpColArr[2] 	= median(rotArray);
+		tmpColArr[1] 	= median(gruenArray); 
+		tmpColArr[0] 	= median(blauArray);
+		pixels[x][y] 	= setColors(tmpColArr);
+		
+		
+		
+		
 	}
 
 	/** 
@@ -233,6 +264,49 @@ public class Bildbearbeitung {
 			colors[3] = random.nextInt(256);
 			pixels[x][y] = setColors(colors);
 		}
+	}
+	
+	/**
+	 * EiP Übungsblatt 8, Aufgabe 8-2 (c) 
+	 * Bestimmt den Median eines Arrays.
+	 * Zunächst wir das Array sortiert, dann bei ungerader Länge das mittlere Element,
+	 * bei gerader Länge das größere der beiden mittleren Elemente herausgegeben.
+	 * 
+	 * @param 	array vom Typ int
+	 * @return	der Median
+	 * 
+	 */
+	public static int median(int[] array){
+		sort(array);
+		int l = array.length;
+		if (l%2==1){ // Länge ist ungerade, dann das Mittlere
+			return array[l/2];
+		}
+		else if (array[l/2] >= array[l/2+1]){ //Länge ist gerade -> das Grössere der beiden Mittleren
+			return array[l/2-1];
+		}
+		else return array[l/2];
+	}
+	
+	/**
+	 * EiP Übungsblatt 8, Aufgabe 8-2 (b) 
+	 * sortiert ein int Array
+	 * 
+	 * @param array	vom Typ Integer
+	 */
+	public static void sort(int[] array){
+		int[] tempArray = array;
+		for (int i=0;i<tempArray.length;i++){
+			for (int j=i+1;j<tempArray.length;j++){
+				if (tempArray[j]<tempArray[i]){
+					// tausche elemente
+					int temp = tempArray[i];
+					tempArray[i]=tempArray[j];
+					tempArray[j]=temp;
+				}
+			}
+		}
+		array = tempArray;
 	}
  
     public static void main(String[] args) {
